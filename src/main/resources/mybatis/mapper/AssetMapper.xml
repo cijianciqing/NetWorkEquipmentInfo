@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jsjzx.wlyw.sb004.mapper.AssetMapper">
+  <resultMap id="BaseResultMap" type="jsjzx.wlyw.sb004.entities.Asset">
+    <id column="hostid" jdbcType="INTEGER" property="hostid" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="devicename" jdbcType="VARCHAR" property="devicename" />
+    <result column="hostname" jdbcType="VARCHAR" property="hostname" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="buytime" jdbcType="TIMESTAMP" property="buytime" />
+    <result column="shelftime" jdbcType="TIMESTAMP" property="shelftime" />
+    <result column="guaranty" jdbcType="TIMESTAMP" property="guaranty" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="grade" jdbcType="VARCHAR" property="grade" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    hostid, company, department, devicename, hostname, type, brand, model, sn, ip, buytime, 
+    shelftime, guaranty, status, grade, location, note
+  </sql>
+  <select id="selectByExample" parameterType="jsjzx.wlyw.sb004.entities.AssetExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from asset
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from asset
+    where hostid = #{hostid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from asset
+    where hostid = #{hostid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="jsjzx.wlyw.sb004.entities.AssetExample">
+    delete from asset
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="jsjzx.wlyw.sb004.entities.Asset">
+    insert into asset (hostid, company, department, 
+      devicename, hostname, type, 
+      brand, model, sn, ip, 
+      buytime, shelftime, guaranty, 
+      status, grade, location, 
+      note)
+    values (#{hostid,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{devicename,jdbcType=VARCHAR}, #{hostname,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{brand,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{buytime,jdbcType=TIMESTAMP}, #{shelftime,jdbcType=TIMESTAMP}, #{guaranty,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{grade,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="jsjzx.wlyw.sb004.entities.Asset">
+    insert into asset
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="hostid != null">
+        hostid,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+      <if test="devicename != null">
+        devicename,
+      </if>
+      <if test="hostname != null">
+        hostname,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="brand != null">
+        brand,
+      </if>
+      <if test="model != null">
+        model,
+      </if>
+      <if test="sn != null">
+        sn,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="buytime != null">
+        buytime,
+      </if>
+      <if test="shelftime != null">
+        shelftime,
+      </if>
+      <if test="guaranty != null">
+        guaranty,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="location != null">
+        location,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="hostid != null">
+        #{hostid,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="devicename != null">
+        #{devicename,jdbcType=VARCHAR},
+      </if>
+      <if test="hostname != null">
+        #{hostname,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="buytime != null">
+        #{buytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shelftime != null">
+        #{shelftime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="guaranty != null">
+        #{guaranty,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="jsjzx.wlyw.sb004.entities.AssetExample" resultType="java.lang.Long">
+    select count(*) from asset
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update asset
+    <set>
+      <if test="record.hostid != null">
+        hostid = #{record.hostid,jdbcType=INTEGER},
+      </if>
+      <if test="record.company != null">
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null">
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.devicename != null">
+        devicename = #{record.devicename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hostname != null">
+        hostname = #{record.hostname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brand != null">
+        brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.model != null">
+        model = #{record.model,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sn != null">
+        sn = #{record.sn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buytime != null">
+        buytime = #{record.buytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.shelftime != null">
+        shelftime = #{record.shelftime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.guaranty != null">
+        guaranty = #{record.guaranty,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.grade != null">
+        grade = #{record.grade,jdbcType=VARCHAR},
+      </if>
+      <if test="record.location != null">
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update asset
+    set hostid = #{record.hostid,jdbcType=INTEGER},
+      company = #{record.company,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
+      devicename = #{record.devicename,jdbcType=VARCHAR},
+      hostname = #{record.hostname,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      brand = #{record.brand,jdbcType=VARCHAR},
+      model = #{record.model,jdbcType=VARCHAR},
+      sn = #{record.sn,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      buytime = #{record.buytime,jdbcType=TIMESTAMP},
+      shelftime = #{record.shelftime,jdbcType=TIMESTAMP},
+      guaranty = #{record.guaranty,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      grade = #{record.grade,jdbcType=VARCHAR},
+      location = #{record.location,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="jsjzx.wlyw.sb004.entities.Asset">
+    update asset
+    <set>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="devicename != null">
+        devicename = #{devicename,jdbcType=VARCHAR},
+      </if>
+      <if test="hostname != null">
+        hostname = #{hostname,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        brand = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="buytime != null">
+        buytime = #{buytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shelftime != null">
+        shelftime = #{shelftime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="guaranty != null">
+        guaranty = #{guaranty,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where hostid = #{hostid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="jsjzx.wlyw.sb004.entities.Asset">
+    update asset
+    set company = #{company,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      devicename = #{devicename,jdbcType=VARCHAR},
+      hostname = #{hostname,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      brand = #{brand,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      buytime = #{buytime,jdbcType=TIMESTAMP},
+      shelftime = #{shelftime,jdbcType=TIMESTAMP},
+      guaranty = #{guaranty,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR}
+    where hostid = #{hostid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Title</title>
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="row" id="titlePart" th:replace="commons/bar::jumbotron"></div>
+
+<div class="row">
+    <div class="col-md-2 col-md-offset-1">
+        <a class="btn btn-primary btn-lg" th:href="@{/asset/showAsset/getAllAssets}"
+           role="button">
+            首页
+        </a>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+        <form th:action="@{/asset/searchAssetWithIP}" method="get">
+            <div class="input-group">
+                <input type="text" name="searchInfo" class="form-control" placeholder="Search with ip...">
+                <span class="input-group-btn">
+                <button type="submit" class="btn btn-default" >Go!</button>
+            </span>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-2 col-md-offset-1">
+        <a class="btn btn-primary btn-lg" th:href="@{'/asset/editAsset/'+${asset.hostid}}" role="button">
+            编辑设备</a>
+    </div>
+</div>
+<br>
+<table class="table table-striped ">
+    <tr>
+        <td> 公司：</td>
+        <td>
+            [[${asset.company}]]
+        </td>
+    </tr>
+    <tr>
+        <td>部门：</td>
+        <td>
+            [[${asset.department}]]
+        </td>
+    </tr>
+    <tr>
+        <td>设备名称：</td>
+        <td>
+            [[${asset.devicename}]]
+        </td>
+    </tr>
+    <tr>
+        <td> 设备别名：</td>
+        <td>
+            [[${asset.hostname}]]
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>设备类型：</td>
+        <td>
+           [[${asset.type}]]
+        </td>
+    </tr>
+
+    <tr>
+        <td> 生产厂商：</td>
+        <td>
+            [[${asset.brand}]]
+        </td>
+    </tr>
+    <tr>
+        <td> 设备型号：</td>
+        <td>
+            [[${asset.model}]]
+        </td>
+    </tr>
+
+    <tr>
+        <td>序列号：</td>
+        <td>
+            [[${asset.sn}]]
+        </td>
+    </tr>
+    <tr>
+        <td>ip地址：</td>
+        <td>
+            [[${asset.ip}]]
+        </td>
+    </tr>
+    <tr>
+        <td>购买日期：</td>
+        <td th:text="${#dates.format(asset.buytime, 'yyyy-MM-dd')}"></td>
+    </tr>
+    <tr>
+        <td>安装日期：</td>
+        <td th:text="${#dates.format(asset.shelftime, 'yyyy-MM-dd')}"></td>
+    </tr>
+    <tr>
+        <td>保修截止日期：</td>
+        <td th:text="${#dates.format(asset.guaranty, 'yyyy-MM-dd')}"></td>
+    </tr>
+    <tr>
+        <td>设备状态：</td>
+        <td>
+            [[${asset.status}]]
+        </td>
+    </tr>
+    <tr>
+        <td> 设备级别：</td>
+        <td>
+            [[${asset.grade}]]
+        </td>
+    </tr>
+    <tr>
+        <td> 详细位置：</td>
+        <td>
+            [[${asset.location}]]
+        </td>
+    </tr>
+    <tr>
+        <td> 备注：</td>
+        <td>
+            [[${asset.note}]]
+        </td>
+    </tr>
+</table>
+</body>
+</html>
