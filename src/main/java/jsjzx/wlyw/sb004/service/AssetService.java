@@ -184,8 +184,8 @@ public class AssetService {
     }
 
     public List<String> getModelNamesByBrand(String type, String brand) {
-        System.out.println("type: "+type);
-        System.out.println("brand: "+brand);
+//        System.out.println("type: "+type);
+//        System.out.println("brand: "+brand);
         if(type==null){
             type="";
         }
@@ -197,7 +197,7 @@ public class AssetService {
         criteria.andTypeEqualTo(type);
         criteria.andBrandcnEqualTo(brand);
         List<AssetType> assetTypes = assetTypeMapper.selectByExample(example);
-        System.out.println(assetTypes.isEmpty());
+//        System.out.println(assetTypes.isEmpty());
         if(assetTypes.isEmpty()){
             return null;
         }

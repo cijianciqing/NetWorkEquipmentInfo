@@ -1,7 +1,9 @@
 package jsjzx.wlyw.sb004.entities;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Null;
 import java.util.Date;
 
 public class Asset {
@@ -13,6 +15,7 @@ public class Asset {
 
     private String devicename;
 
+    @NotEmpty
     private String hostname;
 
     private String type;

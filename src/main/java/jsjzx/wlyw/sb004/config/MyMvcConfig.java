@@ -15,8 +15,9 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("atguigu").setViewName("success");//用于测试
-        registry.addViewController("/").setViewName("login");
+        registry.addViewController("/").setViewName("asset/list");
         registry.addViewController("/main.html").setViewName("/asset/list");
+        registry.addViewController("/bootstrapT").setViewName("/asset/list");
     }
 
     @Bean

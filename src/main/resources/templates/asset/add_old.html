@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Title</title>
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <!-- Custom styles for this template -->
+    <script  th:inline="javascript">
+        //默认情况下全部为select one ...,全部添加change事件
+        //1、选择#assetType，添加change函数
+        /*a、使#assetBrand只保留第一个option子节点
+        * b、获取#assetType的值，若为“",则无响应
+        * c、若不为”“，change函数响应，发送ajax请求
+        * c.1:url:/asset/selectBrand
+        * c.2:args:type,time
+        * 返回一个JSON数组
+        *   若为0，则提示品牌为空
+        *   若不为0，遍历
+        *       设置默认值
+        * */
+
+        $(function () {
+            $("#assetType").change(function () {
+                    $("#assetBrand option:not(:first)").remove();
+                    var assetType = $(this).val();
+
+                    if (assetType != "") {
+
+                        var url = [[@{/asset/selectBrand}]];
+                        var args = {"assetType": assetType, "time": new Date};
+                        $.getJSON(url, args, function (data) {
+                            if (data.length == 0) {
+                                alert("You got no brand");
+                            } else {
+                                // $("#assetBrand option:first-child").remove();
+                                for (var i = 0; i < data.length; i++) {
+                                    var brandId = data[i].id;
+                                    var brandName = data[i].brandcn;
+                                    $("#assetBrand").append("<option value='" + brandId + "'>" + brandName + "</option>");
+                                }
+                            }
+                        })
+                    }
+                }
+            )
+        })
+
+        $(function () {
+            $("#assetBrand").change(function () {
+                    $("#assetModel option:not(:first)").remove();
+                    var assetBrandId = $(this).val();
+                    /*  alert($(this).val());
+                      alert($("#assetBrand option:selected").text());
+                       $("#assetModel option:selected").val($("#assetBrand option:selected").text());
+                       alert($(this).val());*/
+                    if (assetBrandId != "") {
+                        var url = [[@{/asset/selectModel}]];
+                        var args = {"assetBrandId": assetBrandId, "time": new Date};
+                        $.getJSON(url, args, function (data) {
+                            if (data.length == 0) {
+                                alert("You got no Model");
+                            } else {
+                                //$("#assetModel option:first-child").remove();
+                                for (var i = 0; i < data.length; i++) {
+                                    var AssetModelId = data[i].id;
+                                    var AssetModelName = data[i].model;
+                                    $("#assetModel").append("<option value='" + AssetModelName + "'>" + AssetModelName + "</option>");
+                                }
+                            }
+                        })
+                    }
+                }
+            )
+        })
+
+        $(function () {
+            $("#assetCompany").change(function () {
+
+                    $("#assetDepartment option:not(:first)").remove();
+                    var assetComponyName = $(this).val();
+                    if (assetComponyName != "") {
+                        var url = [[@{/asset/selectDepartment}]];
+                        var args = {"assetComponyName": assetComponyName, "time": new Date};
+                        $.getJSON(url, args, function (data) {
+                            if (data.length == 0) {
+                                alert("You got no Model");
+                            } else {
+                                //$("#assetModel option:first-child").remove();
+                                for (var i = 0; i < data.length; i++) {
+                                    var assetDepartmentId = data[i].id;
+                                    var assetDepartmentName = data[i].departmentame;
+                                    $("#assetDepartment").append("<option value='" + assetDepartmentId + "'>" + assetDepartmentName + "</option>");
+                                }
+                            }
+                        })
+                    }
+                }
+            )
+        })
+    </script>
+</head>
+<body>
+<div  th:replace="commons/bar::jumbotron"></div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-1">
+        <a class="btn btn-primary btn-lg" th:href="@{/
+        }"
+           role="button">
+        首页
+        </a>
+    </div>
+</div>
+<br>
+<form  th:method="post" class="form-horizontal" th:object="${asset}">
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">公司</label>
+        <div class="col-md-10">
+            <select id="assetCompany" name="assetCompany" class="form-control">
+                <option value="">select company</option>
+                <option th:each="companyName:${companyNames}" th:value="${companyName}" >[[${companyName}]]</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">部门</label>
+        <div class="col-sm-10">
+            <select id="assetDepartment" name="assetDepartment" class="form-control">
+                <option value="">select department</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">设备名称</label>
+        <div class="col-sm-10">
+            <input type="text" name="deviceName" id="deviceName" value="" placeholder="such as: NetcenterSwitch"
+                   class="form-control">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">设备别名</label>
+        <div class="col-sm-10">
+            <input type="text" name="hostName" id="hostName" value="" placeholder="such as: 网络信息中心交换机"
+                   class="form-control">
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">设备类型</label>
+        <div class="col-sm-10">
+            <select id="assetType" name="assetType" class="form-control">
+                <option value="">select device type</option>
+                <option th:each="typeName:${typeNames}" th:value="${typeName}">[[${typeName}]]</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">生产厂商</label>
+        <div class="col-md-10">
+
+            <select id="assetBrand" name="assetBrand" class="form-control">
+                <option value="">select brand</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">设备型号</label>
+        <div class="col-md-10">
+            <select id="assetModel" name="assetModel" class="form-control">
+                <option value="">select model</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-md-2 control-label"> 序列号</label>
+        <div class="col-md-10">
+            <input type="text" name="snCode" id="snCode" value="" placeholder="S/N code" class="form-control">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label"> ip地址</label>
+        <div class="col-md-10">
+            <input type="text" name="ipAddress" id="ipAddress" value="" placeholder="such as: 10.0.0.1"
+                   class="form-control">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label"> 购买日期</label>
+        <div class="col-md-10">
+            <input type="text" name="buyTime" id="buyTime" value="" placeholder="yyyy-MM-dd" class="form-control">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">安装日期</label>
+        <div class="col-md-10">
+            <input type="text" name="shelfTime" id="shelfTime" value="" placeholder="yyyy-MM-dd" class="form-control">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">保修截止日期</label>
+        <div class="col-md-10">
+            <input type="text" name="gurantyTime" id="gurantyTime" value="" placeholder="yyyy-MM-dd" class="form-control">
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">设备状态</label>
+        <div class="col-md-10">
+            <select id="assetStatus" class="form-control">
+                <option value="">select status</option>
+                <option th:each="statusName:${statusNames}" th:value="${statusName}">[[${statusName}]]</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">设备级别</label>
+        <div class="col-md-10">
+            <select id="assetGrade" class="form-control">
+                <option value="">select grade</option>
+                <option th:each="gradeName:${gradeNames}" th:value="${gradeName}">[[${gradeName}]]</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-md-2 control-label">详细位置</label>
+        <div class="col-md-10">
+            <input type="text" name="location" id="location" value="" placeholder="such as ：..." class="form-control">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">备注</label>
+        <div class="col-md-10">
+            <textarea name="comment" id="comment" rows="5" class="form-control"></textarea>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button name="submit" id="submit" type="submit" class="btn btn-default">submit</button>
+        </div>
+    </div>
+
+</form>
+</body>
+<script  th:inline="javascript">
+    $(function () {
+        $("#submit").click(function () {
+            var url = [[@{/asset/addAsset}]];
+            if ($("#assetDepartment option:selected").text() == "select department") {
+                var departmentValue = "";
+            } else {
+                departmentValue = $("#assetDepartment option:selected").text();
+            }
+
+            if ($("#assetBrand option:selected").text() == "select brand") {
+                var brandVal = "";
+            } else {
+                brandVal = $("#assetBrand option:selected").text();
+            }
+            var args = {
+                "company": $("#assetCompany").val(),
+                "department": departmentValue,
+                "devicename": $("#deviceName").val(),
+                "hostname": $("#hostName").val(),
+                "type": $("#assetType").val(),
+                //Caution the $("#assetBrand).val() is the brandId
+                "brand": brandVal,
+                "model": $("#assetModel").val(),
+                "sn": $("#snCode").val(),
+                "ip": $("#ipAddress").val(),
+                "buytime": $("#buyTime").val(),
+                "shelftime": $("#shelfTime").val(),
+                "guaranty": $("#gurantyTime").val(),
+                "status": $("#assetStatus").val(),
+                "grade": $("#assetGrade").val(),
+                "location": $("#location").val(),
+                "note": $("#comment").val(),
+                "time": new Date
+            };
+
+            $.post(url, args, function (data) {
+                window.location.href = [[@{/}]];
+            }, "json");
+            return false;
+        })
+    })
+</script>
+</html>

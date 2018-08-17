@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -6,11 +5,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Title</title>
-    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
-    <link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet">
-    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/bootstrapTable/bootstrap-table.min.css}" rel="stylesheet">
+
+    <script th:src="@{/jquery/jquery-2.1.0.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/bootstrapTable/bootstrap-table.min.js}"></script>
+    <script th:src="@{/bootstrapTable/locale/bootstrap-table-zh-CN.min.js}"></script>
     <!-- Custom styles for this template -->
-    <script  th:inline="javascript">
+    <script th:inline="javascript">
         //默认情况下全部为select one ...,全部添加change事件
         //1、选择#assetType，添加change函数
         /*a、使#assetBrand只保留第一个option子节点
@@ -105,24 +108,26 @@
     </script>
 </head>
 <body>
-<div  th:replace="commons/bar::jumbotron"></div>
+
+<div th:replace="commons/bar::jumbotron"></div>
 <div class="row">
     <div class="col-md-2 col-md-offset-1">
-        <a class="btn btn-primary btn-lg" th:href="@{/asset/showAsset/getAllAssets}"
+        <a class="btn btn-primary btn-lg" th:href="@{/}"
            role="button">
-        首页
+            首页
         </a>
     </div>
 </div>
 <br>
-<form  th:method="post" class="form-horizontal">
+<div id="errorContent"></div>
+<form th:method="post" class="form-horizontal">
 
     <div class="form-group">
         <label class="col-md-2 control-label">公司</label>
         <div class="col-md-10">
             <select id="assetCompany" name="assetCompany" class="form-control">
                 <option value="">select company</option>
-                <option th:each="companyName:${companyNames}" th:value="${companyName}" >[[${companyName}]]</option>
+                <option th:each="companyName:${companyNames}" th:value="${companyName}">[[${companyName}]]</option>
             </select>
         </div>
     </div>
@@ -138,7 +143,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">设备名称</label>
         <div class="col-sm-10">
-            <input type="text" name="deviceName" id="deviceName" value="" placeholder="such as: NetcenterSwitch"
+            <input type="text" name="hostName" id="hostName" value="" placeholder="such as: NetcenterSwitch"
                    class="form-control">
         </div>
     </div>
@@ -146,7 +151,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">设备别名</label>
         <div class="col-sm-10">
-            <input type="text" name="hostName" id="hostName" value="" placeholder="such as: 网络信息中心交换机"
+            <input type="text" name="deviceName" id="deviceName" value="" placeholder="such as: 网络信息中心交换机"
                    class="form-control">
         </div>
     </div>
@@ -198,21 +203,22 @@
     <div class="form-group">
         <label class="col-md-2 control-label"> 购买日期</label>
         <div class="col-md-10">
-            <input type="date" name="buyTime" id="buyTime" value="" placeholder="" class="form-control">
+            <input type="text" name="buyTime" id="buyTime" value="" placeholder="yyyy-MM-dd" class="form-control">
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-md-2 control-label">安装日期</label>
         <div class="col-md-10">
-            <input type="date" name="shelfTime" id="shelfTime" value="" placeholder="" class="form-control">
+            <input type="text" name="shelfTime" id="shelfTime" value="" placeholder="yyyy-MM-dd" class="form-control">
         </div>
     </div>
 
     <div class="form-group">
         <label class="col-md-2 control-label">保修截止日期</label>
         <div class="col-md-10">
-            <input type="date" name="gurantyTime" id="gurantyTime" value="" placeholder="" class="form-control">
+            <input type="text" name="gurantyTime" id="gurantyTime" value="" placeholder="yyyy-MM-dd"
+                   class="form-control">
         </div>
     </div>
 
@@ -259,7 +265,7 @@
 
 </form>
 </body>
-<script  th:inline="javascript">
+<script th:inline="javascript">
     $(function () {
         $("#submit").click(function () {
             var url = [[@{/asset/addAsset}]];
@@ -274,7 +280,7 @@
             } else {
                 brandVal = $("#assetBrand option:selected").text();
             }
-            var args = {
+            var aargs = {
                 "company": $("#assetCompany").val(),
                 "department": departmentValue,
                 "devicename": $("#deviceName").val(),
@@ -295,11 +301,34 @@
                 "time": new Date
             };
 
-            $.post(url, args, function (data) {
-                window.location.href = [[@{/asset/showAsset/getAllAssets}]];
-            }, "json");
+            $.ajax({
+                url: url,
+                type: "post",
+                data: aargs,
+                success: function (result) {
+                    if (result.code == 100) {
+                        window.location.href = [[@{/}]];
+                        }
+                    else {
+                        $("#errorContent").empty();
+                            if (result.extend.errorFields.hostname) {
+                                $("#errorContent").append("<b>设备名称：" + "格式错误" + "</b><br/>");
+                            };
+                            if (result.extend.errorFields.buytime) {
+                                $("#errorContent").append("<b>购买时间：" + "格式错误" + "</b><br/>");
+                            };
+                            if (result.extend.errorFields.shelftime) {
+                                $("#errorContent").append("<b>上架时间：" + "格式错误" + "</b><br/>");
+                            };
+                            if (result.extend.errorFields.guaranty) {
+                                $("#errorContent").append("<b>保修时间：" + "格式不正确" + "</b><br/>");
+                            };
+                        }
+                    }
+                });
             return false;
-        })
+        });
+
     })
 </script>
 </html>
